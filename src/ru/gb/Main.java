@@ -1,93 +1,88 @@
 package ru.gb;
 
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import ru.gb.deque.DegueImpl;
+import ru.gb.queue.QueueImpl;
 
 public class Main {
 
     public static void main(String[] args) {
-        Notebook[] notebooks = new Notebook[5000];
-        for (int i = 0; i < 5000; i += 5) {
-            notebooks[i] = new Notebook("Lenuvo", 500 + (int) (Math.random() * 1000), Math.pow(2, (1 + (int) (Math.random() * 7))));
-            notebooks[i + 1] = new Notebook("Asos", 500 + (int) (Math.random() * 1000), Math.pow(2, (1 + (int) (Math.random() * 7))));
-            notebooks[i + 2] = new Notebook("MacNote", 500 + (int) (Math.random() * 1000), Math.pow(2, (1 + (int) (Math.random() * 7))));
-            notebooks[i + 3] = new Notebook("Eser", 500 + (int) (Math.random() * 1000), Math.pow(2, (1 + (int) (Math.random() * 7))));
-            notebooks[i + 4] = new Notebook("Xamiou", 500 + (int) (Math.random() * 1000), Math.pow(2, (1 + (int) (Math.random() * 7))));
 
+//        задание 1
+        Integer[] arr = new Integer[30];
+        for (int i = 0; i < arr.length; i++) {
+            if (i < 11)
+                arr[i] = i;
+            else arr[i] = i + 1;
         }
-        System.out.println("Не отсортирован");
-        out(notebooks);
+        System.out.println(display(arr));
+        System.out.println(BinarySearch.search(arr));
 
-        notebooks = quickSort(Arrays.asList(notebooks), 1).toArray(notebooks);
-        System.out.println("Сортирован");
-        out(notebooks);
+
+//        задание 2
+        DegueImpl<Integer> deque = new DegueImpl<>(5);
+        System.out.println("add element: " + deque.insertRight(34));
+        System.out.println("add element: " + deque.insertRight(12));
+        System.out.println("add element: " + deque.insertRight(20));
+        System.out.println("add element: " + deque.insertLeft(16));
+        System.out.println("add element: " + deque.insertRight(17));
+        System.out.println("add element: " + deque.insertRight(13));
+
+        deque.display();
+        deque.removeRight();
+        deque.display();
+        System.out.println("add element: " + deque.insertRight(15));
+        System.out.println("add element: " + deque.insertRight(15));
+        deque.display();
+        deque.removeLeft();
+        deque.removeLeft();
+        deque.removeLeft();
+        deque.removeLeft();
+        deque.removeLeft();
+        deque.removeLeft();
+        deque.removeLeft();
+        deque.display();
+        System.out.println("add element: " + deque.insertLeft(16));
+        System.out.println("add element: " + deque.insertLeft(16));
+        deque.display();
+        deque.removeRight();
+        deque.removeRight();
+        deque.removeRight();
+        deque.display();
+        System.out.println("add element: " + deque.insertRight(13));
+        deque.display();
+
+
+//        задание 3
+        QueueImpl<Integer> queue = new QueueImpl<>(5);
+        System.out.println("add element: " + queue.insert(34));
+        System.out.println("add element: " + queue.insert(12));
+        System.out.println("add element: " + queue.insert(20));
+        System.out.println("add element: " + queue.insert(16));
+        System.out.println("add element: " + queue.insert(17));
+        System.out.println("add element: " + queue.insert(13));
+
+        queue.display();
+        queue.remove();
+        queue.display();
+        System.out.println("add element: " + queue.insert(15));
+        System.out.println("add element: " + queue.insert(11));
+        queue.display();
+        queue.remove();
+        queue.remove();
+        queue.display();
+        System.out.println("add element: " + queue.insert(11));
+        queue.display();
+
     }
 
-    public static List<Notebook> quickSort(List<Notebook> arr, int attribute) {
+    public static String display(Integer[] arr) {
 
-        if (arr.isEmpty()) {
-            return arr;
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < arr.length; i++) {
+            sb.append(arr[i]);
+            if (i != arr.length - 1)
+                sb.append(", ");
         }
-
-        Notebook base = arr.get(0);
-
-        List<Notebook> left = new LinkedList<>();
-        List<Notebook> middle = new LinkedList<>();
-        List<Notebook> right = new LinkedList<>();
-
-
-        for (Notebook n : arr) {
-            if (attribute == 1) {
-                if ((int) (n.getPrice() / 100) == (int) (base.getPrice() / 100)) {
-                    middle.add(n);
-                } else if ((int) (n.getPrice() / 100) > (int) (base.getPrice() / 100)) {
-                    right.add(n);
-
-                } else {
-                    left.add(n);
-                }
-            }
-
-            if (attribute == 2) {
-                if (n.getRam() == base.getRam()) {
-                    middle.add(n);
-                } else if (n.getRam() > base.getRam()) {
-                    right.add(n);
-
-                } else {
-                    left.add(n);
-                }
-            }
-
-            if (attribute == 3) {
-                if (n.getBrand().compareTo(base.getBrand()) == 0) {
-                    middle.add(n);
-                } else if (n.getBrand().compareTo(base.getBrand()) > 0) {
-                    right.add(n);
-
-                } else {
-                    left.add(n);
-                }
-            }
-        }
-        if (middle.size() > 1 && attribute == 1)
-            middle = quickSort(middle, 2);
-        if (middle.size() > 1 && attribute == 2)
-            middle = quickSort(middle, 3);
-
-        left = quickSort(left, 1);
-        right = quickSort(right, 1);
-
-        left.addAll(middle);
-        left.addAll(right);
-
-        return left;
-    }
-
-    public static void out(Notebook[] notebooks) {
-        for (Notebook n : notebooks) {
-            System.out.println(n.toString());
-        }
+        return sb.toString();
     }
 }
